@@ -43,6 +43,16 @@ def Key_Stats(cursor_para):
 					, row['Position'], row['CreatedAt'], row['UpdatedAt'], row['BodyAll'].encode("utf-8"), row['ArticleNumber'], row['ArticleUrl'].encode("utf-8"))) 
 				f.write(',\n')
 		"""
+		# None means the authors don't have a position now and will not init one in 3 days
+		# Long means the authors have a long position or will start a long position in 3 days.
+		# Short means the authors have a short position or will start a short position in 3 days.
+		if 'long' in row['Disclosure']:
+			position = 'Long'
+		elif 'short' in row['Disclosure']:
+			position = 'Short'
+		else:
+			position = 'None'
+
 		df = df.append({'Title':row['Title'], 
 					'Date': row['Date'], 
 					'Time': row['Time'], 
@@ -55,12 +65,13 @@ def Key_Stats(cursor_para):
 					'ImageDummy': row['ImageDummy'], 
 					'BodyContent': row['BodyContent'], 
 					'Disclosure': row['Disclosure'], 
-					'Position': row['Position'], 
+					'Position': position, 
 					'CreatedAt': row['CreatedAt'], 
 					'UpdatedAt': row['UpdatedAt'], 
 					'BodyAll': row['BodyAll'], 
 					'ArticleNumber': row['ArticleNumber'], 
-					'ArticleUrl': row['ArticleUrl']
+					'ArticleUrl': row['ArticleUrl'],
+					
 					},ignore_index=True)
 		row = cursor_para.fetchone()
 
