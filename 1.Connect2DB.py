@@ -25,6 +25,46 @@ def Key_Stats(cursor_para):
 	df = df.DataFrame(column = ['Title', 'Date', 'Time', 'TickersAbout', 'TickersIncludes', 
 			'Name', 'NameLink', 'Bio', 'Summary', 'ImageDummy', 'BodyContent', 'Disclosure', 
 			'Position', 'CreatedAt', 'UpdatedAt', 'BodyAll', 'ArticleNumber', 'ArticleUrl'])
+	row = cursor_para.fetchone()
+	with open("result.csv", "w") as f:
+		f.write("{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11},{12},{13},{14},{15},{16},{17},{18}".
+			format(row[''],)) 
+		while row:
+			row = cursor_para.fetchone()
+"""
+	df = df.append({'Title':, 
+					'Date', 
+					'Time', 
+					'TickersAbout', 
+					'TickersIncludes', 
+					'Name', 
+					'NameLink', 
+					'Bio', 
+					'Summary', 
+					'ImageDummy', 
+					'BodyContent', 
+					'Disclosure', 
+					'Position', 
+					'CreatedAt', 
+					'UpdatedAt', 
+					'BodyAll', 
+					'ArticleNumber', 
+					'ArticleUrl'
+					},ignore_index=True)
+"""
+	
 if __name__ == '__main__':
 	cur = MSSQL_Connect()
-	
+	Key_Stats(cur)
+
+
+
+
+
+
+
+
+
+
+
+
