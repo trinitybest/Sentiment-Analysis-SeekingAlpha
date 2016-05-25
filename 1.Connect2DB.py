@@ -1,6 +1,6 @@
 """
 This file use python to read from database and export to csv
-Author: This
+Author: TH
 Date: 24/05/2016
 """
 
