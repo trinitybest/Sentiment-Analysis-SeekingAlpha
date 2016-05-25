@@ -17,18 +17,22 @@ def MSSQL_Connect():
 	database = 'SeekingAlpha'
 	conn = pymssql.connect(server, user, password, database)
 	cursor = conn.cursor(as_dict= True)
-	cursor.execute("SELECT TOP 1000 * FROM dbo.SeekingAlpha_Articles \
+	cursor.execute("SELECT * FROM dbo.SeekingAlpha_Articles \
 	WHERE Disclosure != ''")
 	return cursor
 
 def Key_Stats(cursor_para):
-	
+	count = 0
 	df = pd.DataFrame(columns = ['Title', 'Date', 'Time', 'TickersAbout', 'TickersIncludes', 
 			'Name', 'NameLink', 'Bio', 'Summary', 'ImageDummy', 'BodyContent', 'Disclosure', 
-			'Position', 'CreatedAt', 'UpdatedAt', 'BodyAll', 'ArticleNumber', 'ArticleUrl'])
+			'Position', 'CreatedAt', 'UpdatedAt', 'BodyAll', 'ArticleNumber', 'ArticleUrl','ArticleFull'])
 
 	row = cursor_para.fetchone()
 	while row:
+		count = count + 1
+		if(count%1000 == 0):
+			print(count)
+
 		# Dataframe is better when outputing to csv. Naive f.write will not take good care of line breaks
 		"""
 		with open("result.csv", "w") as f:
@@ -71,6 +75,7 @@ def Key_Stats(cursor_para):
 					'BodyAll': row['BodyAll'], 
 					'ArticleNumber': row['ArticleNumber'], 
 					'ArticleUrl': row['ArticleUrl'],
+					'ArticleFull': row['Summary']+row['BodyAll']
 					
 					},ignore_index=True)
 		row = cursor_para.fetchone()
