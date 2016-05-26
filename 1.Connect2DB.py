@@ -8,7 +8,7 @@ import pymssql
 import pandas as pd 
 import yaml
 
-def MSSQL_Connect():
+def MSSQL_Connect(query):
 	file = open('keys.yaml','r')
 	keys = yaml.load(file)
 	server = keys['DBserver']
@@ -17,11 +17,10 @@ def MSSQL_Connect():
 	database = 'SeekingAlpha'
 	conn = pymssql.connect(server, user, password, database)
 	cursor = conn.cursor(as_dict= True)
-	cursor.execute("SELECT * FROM dbo.SeekingAlpha_Articles \
-	WHERE Disclosure != ''")
+	cursor.execute(query)
 	return cursor
 
-def Key_Stats(cursor_para):
+def Key_Stats(cursor_para, filename):
 	count = 0
 	df = pd.DataFrame(columns = ['Title', 'Date', 'Time', 'TickersAbout', 'TickersIncludes', 
 			'Name', 'NameLink', 'Bio', 'Summary', 'ImageDummy', 'BodyContent', 'Disclosure', 
@@ -56,7 +55,15 @@ def Key_Stats(cursor_para):
 			position = 'Short'
 		else:
 			position = 'None'
-
+		"""
+		summaryLines = row['Summary'].splitlines()
+		summaryRejoined = ' '.join(summaryLines)
+		bodyContentLines = row['BodyContent'].splitlines()
+		bodyContentRejoined = ' '.join(bodyContentLines)
+		bodyAllLines = row['BodyAll'].splitlines()
+		bodyAllRejoined = ' '.join(bodyContentLines)
+		"""
+		# More work is needed to remove line breaks
 		df = df.append({'Title':row['Title'], 
 					'Date': row['Date'], 
 					'Time': row['Time'], 
@@ -65,28 +72,38 @@ def Key_Stats(cursor_para):
 					'Name': row['Name'], 
 					'NameLink': row['NameLink'], 
 					'Bio': row['Bio'], 
-					'Summary': row['Summary'], 
+					'Summary': row['Summary'].replace('\n', ' ').replace(',', ' ').replace('\t', ' '), 
 					'ImageDummy': row['ImageDummy'], 
-					'BodyContent': row['BodyContent'], 
-					'Disclosure': row['Disclosure'], 
+					'BodyContent': row['BodyContent'].replace('\n', ' ').replace(',', ' ').replace('\t', ' '), 
+					'Disclosure': row['Disclosure'].replace('\n', ' ').replace(',', ' ').replace('\t', ' '), 
 					'Position': position, 
 					'CreatedAt': row['CreatedAt'], 
 					'UpdatedAt': row['UpdatedAt'], 
-					'BodyAll': row['BodyAll'], 
+					'BodyAll': row['BodyAll'].replace('\n', ' ').replace(',', ' ').replace('\t', ' '), 
 					'ArticleNumber': row['ArticleNumber'], 
-					'ArticleUrl': row['ArticleUrl'],
-					'ArticleFull': row['Summary']+row['BodyAll']
+					'ArticleUrl': row['ArticleUrl'].replace('\n', ' ').replace(',', ' ').replace('\t', ' '),
+					'ArticleFull': (row['Summary']+row['BodyAll']).replace('\t', ' ').replace(',', ' ').replace('\t', ' ')
 					
 					},ignore_index=True)
 		row = cursor_para.fetchone()
 
-	df.to_csv('result.csv', encoding = 'utf-8')
+	df.to_csv('result_'+filename+'.csv', encoding = 'utf-8')
 	
 
 	
 if __name__ == '__main__':
-	cur = MSSQL_Connect()
-	Key_Stats(cur)
+	query1 = "SELECT TOP 850 * FROM dbo.SeekingAlpha_Articles \
+					WHERE Disclosure != '' \
+					AND  Position = 'Short' \
+					UNION ALL \
+					SELECT TOP 850 * FROM dbo.SeekingAlpha_Articles \
+					WHERE Disclosure != '' \
+					AND  Position = 'Long'"
+	query2 = "SELECT TOP 2000 * FROM dbo.SeekingAlpha_Articles WHERE Disclosure != ''"
+	query3 = "SELECT * FROM dbo.SeekingAlpha_Articles \
+				WHERE Title = 'AmerisourceBergen: Already Been Chewed?'"
+	cur = MSSQL_Connect(query1)
+	Key_Stats(cur, "Long850_Short850")
 
 
 
