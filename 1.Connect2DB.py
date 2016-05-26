@@ -55,14 +55,12 @@ def Key_Stats(cursor_para, filename):
 			position = 'Short'
 		else:
 			position = 'None'
-		"""
-		summaryLines = row['Summary'].splitlines()
-		summaryRejoined = ' '.join(summaryLines)
-		bodyContentLines = row['BodyContent'].splitlines()
-		bodyContentRejoined = ' '.join(bodyContentLines)
-		bodyAllLines = row['BodyAll'].splitlines()
-		bodyAllRejoined = ' '.join(bodyContentLines)
-		"""
+		row['Summary'].rstrip('\r\n').replace('\n', ' ').replace(',', ' ').replace('\t', ' ').replace('\r', ' ')
+		row['BodyContent'].rstrip('\r\n').replace('\n', ' ').replace(',', ' ').replace('\t', ' ').replace('\r', ' ')
+		row['Disclosure'].rstrip('\r\n').replace('\n', ' ').replace(',', ' ').replace('\t', ' ').replace('\r', ' ')
+		row['BodyAll'].rstrip('\r\n').replace('\n', ' ').replace(',', ' ').replace('\t', ' ').replace('\r', ' ')
+		row['ArticleUrl'].rstrip('\r\n').replace('\n', ' ').replace(',', ' ').replace('\t', ' ').replace('\r', ' ')
+		(row['Summary']+row['BodyAll']).rstrip('\r\n').replace('\n', ' ').replace(',', ' ').replace('\t', ' ').replace('\r', ' ')
 		# More work is needed to remove line breaks
 		df = df.append({'Title':row['Title'], 
 					'Date': row['Date'], 
@@ -72,17 +70,17 @@ def Key_Stats(cursor_para, filename):
 					'Name': row['Name'], 
 					'NameLink': row['NameLink'], 
 					'Bio': row['Bio'], 
-					'Summary': row['Summary'].replace('\n', ' ').replace(',', ' ').replace('\t', ' '), 
+					'Summary': row['Summary'].rstrip('\r\n').replace('\n', ' ').replace(',', ' '), 
 					'ImageDummy': row['ImageDummy'], 
-					'BodyContent': row['BodyContent'].replace('\n', ' ').replace(',', ' ').replace('\t', ' '), 
-					'Disclosure': row['Disclosure'].replace('\n', ' ').replace(',', ' ').replace('\t', ' '), 
+					'BodyContent': row['BodyContent'].rstrip('\r\n').replace('\n', ' ').replace(',', ' '), 
+					'Disclosure': row['Disclosure'].rstrip('\r\n').replace('\n', ' ').replace(',', ' '), 
 					'Position': position, 
 					'CreatedAt': row['CreatedAt'], 
 					'UpdatedAt': row['UpdatedAt'], 
-					'BodyAll': row['BodyAll'].replace('\n', ' ').replace(',', ' ').replace('\t', ' '), 
+					'BodyAll': row['BodyAll'].rstrip('\r\n').replace('\n', ' ').replace(',', ' '), 
 					'ArticleNumber': row['ArticleNumber'], 
-					'ArticleUrl': row['ArticleUrl'].replace('\n', ' ').replace(',', ' ').replace('\t', ' '),
-					'ArticleFull': (row['Summary']+row['BodyAll']).replace('\t', ' ').replace(',', ' ').replace('\t', ' ')
+					'ArticleUrl': row['ArticleUrl'].rstrip('\r\n').replace('\n', ' ').replace(',', ' '),
+					'ArticleFull': (row['Summary']+row['BodyAll']).rstrip('\r\n').replace('\n', ' ').replace(',', ' ')
 					
 					},ignore_index=True)
 		row = cursor_para.fetchone()
@@ -102,7 +100,7 @@ if __name__ == '__main__':
 	query2 = "SELECT TOP 2000 * FROM dbo.SeekingAlpha_Articles WHERE Disclosure != ''"
 	query3 = "SELECT * FROM dbo.SeekingAlpha_Articles \
 				WHERE Title = 'AmerisourceBergen: Already Been Chewed?'"
-	cur = MSSQL_Connect(query1)
+	cur = MSSQL_Connect(query3)
 	Key_Stats(cur, "Long850_Short850")
 
 
