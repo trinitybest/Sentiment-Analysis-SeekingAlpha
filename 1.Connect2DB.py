@@ -49,18 +49,8 @@ def Key_Stats(cursor_para, filename):
 		# None means the authors don't have a position now and will not init one in 3 days
 		# Long means the authors have a long position or will start a long position in 3 days.
 		# Short means the authors have a short position or will start a short position in 3 days.
-		if 'long' in row['Disclosure']:
-			position = 'Long'
-		elif 'short' in row['Disclosure']:
-			position = 'Short'
-		else:
-			position = 'None'
-		row['Summary'].rstrip('\r\n').replace('\n', ' ').replace(',', ' ').replace('\t', ' ').replace('\r', ' ')
-		row['BodyContent'].rstrip('\r\n').replace('\n', ' ').replace(',', ' ').replace('\t', ' ').replace('\r', ' ')
-		row['Disclosure'].rstrip('\r\n').replace('\n', ' ').replace(',', ' ').replace('\t', ' ').replace('\r', ' ')
-		row['BodyAll'].rstrip('\r\n').replace('\n', ' ').replace(',', ' ').replace('\t', ' ').replace('\r', ' ')
-		row['ArticleUrl'].rstrip('\r\n').replace('\n', ' ').replace(',', ' ').replace('\t', ' ').replace('\r', ' ')
-		(row['Summary']+row['BodyAll']).rstrip('\r\n').replace('\n', ' ').replace(',', ' ').replace('\t', ' ').replace('\r', ' ')
+		
+
 		# More work is needed to remove line breaks
 		df = df.append({'Title':row['Title'], 
 					'Date': row['Date'], 
@@ -74,7 +64,7 @@ def Key_Stats(cursor_para, filename):
 					'ImageDummy': row['ImageDummy'], 
 					'BodyContent': row['BodyContent'].rstrip('\r\n').replace('\n', ' ').replace(',', ' '), 
 					'Disclosure': row['Disclosure'].rstrip('\r\n').replace('\n', ' ').replace(',', ' '), 
-					'Position': position, 
+					'Position': row['Position'], 
 					'CreatedAt': row['CreatedAt'], 
 					'UpdatedAt': row['UpdatedAt'], 
 					'BodyAll': row['BodyAll'].rstrip('\r\n').replace('\n', ' ').replace(',', ' '), 
