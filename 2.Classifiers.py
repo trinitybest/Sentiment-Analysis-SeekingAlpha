@@ -94,7 +94,7 @@ def preprocess_data(df, nameString):
 
 start_time = datetime.datetime.now()
 print("start_time: ", start_time)
-df = pd.read_csv('result_Long850_Short850_NoiseRemoved.csv')
+df = pd.read_csv('result_Long850_Short850.csv')
 
 featuresets_training=preprocess_data(df,"training")
 featuresets_testing=featuresets_training

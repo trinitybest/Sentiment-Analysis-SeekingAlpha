@@ -80,18 +80,29 @@ def Key_Stats(cursor_para, filename):
 
 	
 if __name__ == '__main__':
-	query1 = "SELECT TOP 850 * FROM dbo.SeekingAlpha_Articles \
+	query_Training = "SELECT TOP 850 * FROM dbo.SeekingAlpha_Articles \
 					WHERE Disclosure != '' \
 					AND  Position = 'Short' \
 					UNION ALL \
 					SELECT TOP 850 * FROM dbo.SeekingAlpha_Articles \
 					WHERE Disclosure != '' \
 					AND  Position = 'Long'"
-	query2 = "SELECT TOP 2000 * FROM dbo.SeekingAlpha_Articles WHERE Disclosure != ''"
-	query3 = "SELECT * FROM dbo.SeekingAlpha_Articles \
-				WHERE Title = 'AmerisourceBergen: Already Been Chewed?'"
-	cur = MSSQL_Connect(query3)
-	Key_Stats(cur, "Long850_Short850")
+	query_Long = "SELECT * FROM dbo.SeekingAlpha_Articles WHERE Position = 'Long'"
+	query_Short = "SELECT * FROM dbo.SeekingAlpha_Articles WHERE Position = 'Short'"
+	query_None = "SELECT * FROM dbo.SeekingAlpha_Articles WHERE Position = 'None'"
+	query_Complex = "SELECT * FROM dbo.SeekingAlpha_Articles WHERE Position = 'Complex'"
+	print("Short")
+	cur = MSSQL_Connect(query_Short)
+	Key_Stats(cur, "Short")
+	print("Complex")
+	cur = MSSQL_Connect(query_Complex)
+	Key_Stats(cur, "Complex")
+	print("Long")
+	cur = MSSQL_Connect(query_Long)
+	Key_Stats(cur, "Long")
+	print("None")
+	cur = MSSQL_Connect(query_None)
+	Key_Stats(cur, "None")
 
 
 
