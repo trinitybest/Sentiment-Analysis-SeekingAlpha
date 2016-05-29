@@ -117,6 +117,11 @@ if __name__ == '__main__':
 					WHERE Disclosure != '' \
 					AND  Position = 'None' ) results \
 					ORDER BY NEWID()"
+	query_top1500LongShortNone_randomlySelected = "SELECT TOP 1500 * FROM dbo.SeekingAlpha_Articles \
+					WHERE Position = 'Long' \
+					OR Position = 'Short' \
+					OR Position = 'None' \
+					ORDER BY NEWID()"
 	"""
 	print("Short")
 	cur = MSSQL_Connect(query_Short)
@@ -131,8 +136,8 @@ if __name__ == '__main__':
 	cur = MSSQL_Connect(query_None)
 	Key_Stats(cur, "None")
 	"""
-	cur = MSSQL_Connect(query_500Short_500Long_500None_randomlySequenced)
-	Key_Stats(cur, "500Short_500Long_500None_randomlySequenced")
+	cur = MSSQL_Connect(query_top1500LongShortNone_randomlySelected)
+	Key_Stats(cur, "top1500LongShortNone_randomlySelected")
 
 
 

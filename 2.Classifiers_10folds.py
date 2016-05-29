@@ -273,7 +273,7 @@ def getAccuracy(pathFile, segment):
 
 start_time = datetime.datetime.now()
 print("start_time: ", start_time)
-getAccuracy('CSV/result_500Short_500Long_500None_randomlySequenced.csv', 150)
+getAccuracy('CSV/result_top1500LongShortNone_randomlySelected.csv', 150)
 end_time = datetime.datetime.now()
 print("end_time: ", end_time)
 
