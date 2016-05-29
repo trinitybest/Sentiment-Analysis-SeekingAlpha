@@ -75,7 +75,7 @@ def Key_Stats(cursor_para, filename):
 					},ignore_index=True)
 		row = cursor_para.fetchone()
 
-	df.to_csv('result_'+filename+'.csv', encoding = 'utf-8')
+	df.to_csv('CSV/result_'+filename+'.csv', encoding = 'utf-8')
 	
 
 	
@@ -91,6 +91,33 @@ if __name__ == '__main__':
 	query_Short = "SELECT * FROM dbo.SeekingAlpha_Articles WHERE Position = 'Short'"
 	query_None = "SELECT * FROM dbo.SeekingAlpha_Articles WHERE Position = 'None'"
 	query_Complex = "SELECT * FROM dbo.SeekingAlpha_Articles WHERE Position = 'Complex'"
+	query_testing = "SELECT TOP 100 * FROM dbo.SeekingAlpha_Articles \
+					WHERE Position = 'Long' \
+					OR Position = 'Short' \
+					ORDER BY NEWID()"
+	query_850Short_850Long_randomlySequenced = "SELECT * FROM \
+					(SELECT TOP 850 * FROM dbo.SeekingAlpha_Articles \
+					WHERE Disclosure != '' \
+					AND  Position = 'Short' \
+					UNION ALL \
+					SELECT TOP 850 * FROM dbo.SeekingAlpha_Articles \
+					WHERE Disclosure != '' \
+					AND  Position = 'Long') results \
+					ORDER BY NEWID()"
+	query_500Short_500Long_500None_randomlySequenced = "SELECT * FROM \
+					(SELECT TOP 500 * FROM dbo.SeekingAlpha_Articles \
+					WHERE Disclosure != '' \
+					AND  Position = 'Short' \
+					UNION ALL \
+					SELECT TOP 500 * FROM dbo.SeekingAlpha_Articles \
+					WHERE Disclosure != '' \
+					AND  Position = 'Long' \
+					UNION ALL \
+					SELECT TOP 500 * FROM dbo.SeekingAlpha_Articles \
+					WHERE Disclosure != '' \
+					AND  Position = 'None' ) results \
+					ORDER BY NEWID()"
+	"""
 	print("Short")
 	cur = MSSQL_Connect(query_Short)
 	Key_Stats(cur, "Short")
@@ -103,7 +130,9 @@ if __name__ == '__main__':
 	print("None")
 	cur = MSSQL_Connect(query_None)
 	Key_Stats(cur, "None")
-
+	"""
+	cur = MSSQL_Connect(query_500Short_500Long_500None_randomlySequenced)
+	Key_Stats(cur, "500Short_500Long_500None_randomlySequenced")
 
 
 

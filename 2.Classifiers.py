@@ -86,7 +86,7 @@ def preprocess_data(df, nameString):
 	print(len(featuresets))
 	print("featuresets ended")
 
-	save_featuresets = open("pickled/features_"+nameString+".pickles","wb")
+	save_featuresets = open("pickled/features_"+nameString+".pickle","wb")
 	pickle.dump(featuresets, save_featuresets)
 	save_featuresets.close()
 
@@ -94,7 +94,7 @@ def preprocess_data(df, nameString):
 
 start_time = datetime.datetime.now()
 print("start_time: ", start_time)
-df = pd.read_csv('result_Long850_Short850.csv')
+df = pd.read_csv('CSV/result_testingTop100.csv')
 
 featuresets_training=preprocess_data(df,"training")
 featuresets_testing=featuresets_training
