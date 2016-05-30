@@ -168,6 +168,9 @@ def getAccuracy(pathFile, segment):
                                  'SVC_poly',
                                  'SVC_rbf',
                                  'SGD'])
+	# This time, we use hand picked 1500 msgs as training set and randomly selected testing set
+	#df_training_set = pd.read_csv("CSV/result_500Short_500Long_500None_randomlySequenced.csv")
+	#training_set = preprocess_data_no_name_string(df_training_set)
 	for group in range(1,11):
 
 
@@ -273,7 +276,7 @@ def getAccuracy(pathFile, segment):
 
 start_time = datetime.datetime.now()
 print("start_time: ", start_time)
-getAccuracy('CSV/result_top1500LongShortNone_randomlySelected.csv', 150)
+getAccuracy('CSV/result_top1500LongShort_randomlySelected.csv', 150)
 end_time = datetime.datetime.now()
 print("end_time: ", end_time)
 
